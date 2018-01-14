@@ -21,6 +21,17 @@ public class HelperBase {
         wd.findElement(locator).sendKeys(name);
     }
 
+    public void clickSubmit() {
+        click(By.name ("submit"));
+    }
+    public void clickUpdate() {
+        click(By.name ("update"));
+    }
+
+    public void alertOk(){
+        wd.switchTo().alert().accept();
+    }
+
     public boolean isAlertPresent() {
         try {
             wd.switchTo().alert();

@@ -20,15 +20,15 @@ public class GroupHelper extends HelperBase {
         click(By.name ("new"));
     }
 
-    public void clickSubmit() {
-        click(By.name ("submit"));
-    }
-
     public void clickSelect() {
         click(By.name ("selected[]"));
     }
 
     public void clickDelete() {
         click(By.name ("delete"));
+    }
+
+    public void clickEdit() {
+        click(By.name ("edit"));
     }
 }

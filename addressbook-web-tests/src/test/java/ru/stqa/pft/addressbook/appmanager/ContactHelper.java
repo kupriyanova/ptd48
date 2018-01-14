@@ -17,4 +17,12 @@ public class ContactHelper extends HelperBase{
         type(By.name ("mobile"), contactData.getMobile());
         type(By.name ("email"),contactData.getEmail());
     }
+
+    public void contactEdit() {
+        click(By.xpath ("//a[contains(@href, 'edit')]"));
+    }
+
+    public void contactDelete() {
+        click(By.xpath ("//input[@value='Delete']"));
+    }
 }
