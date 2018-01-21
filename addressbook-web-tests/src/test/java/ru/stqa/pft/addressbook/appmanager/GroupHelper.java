@@ -31,4 +31,23 @@ public class GroupHelper extends HelperBase {
     public void clickEdit() {
         click(By.name ("edit"));
     }
+
+    public void returnGroupPage() {
+        click(By.linkText ("group page"));
+    }
+
+    public void createGroup(GroupData group) {
+        initGroupCreation();
+        fillGroupForm(group);
+        clickSubmit();
+        returnGroupPage();
+    }
+
+    public boolean isThereAGroup() {
+        return isElementPresent(By.name ("selected[]"));
+    }
+
+    public boolean isThereAGroupName() {
+        return isElementPresent(By.xpath ("//span[contains (text()='name')]"));
+    }
 }

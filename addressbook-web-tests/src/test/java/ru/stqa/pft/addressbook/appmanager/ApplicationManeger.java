@@ -6,6 +6,8 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.BrowserType;
 import org.openqa.selenium.safari.SafariDriver;
 
+import java.util.concurrent.TimeUnit;
+
 public class ApplicationManeger {
 
     private WebDriver wd;
@@ -27,6 +29,7 @@ public class ApplicationManeger {
         } else if(browser.equals(BrowserType.SAFARI)) {
             wd = new SafariDriver();
         }
+        wd.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
         wd.get("http://localhost/addressbook/index.php");
         groupHelper = new GroupHelper(wd);
         contactHelper = new ContactHelper(wd);
@@ -45,10 +48,10 @@ public class ApplicationManeger {
     public ContactHelper getContactHelper() {
         return contactHelper;
     }
-    public NavigationHelper getnavigationHelper() {
+    public NavigationHelper getNavigationHelper() {
         return navigationHelper;
     }
-    public SessionHelper getsessionHelper() {
+    public SessionHelper getSessionHelper() {
         return sessionHelper;
     }
 }
