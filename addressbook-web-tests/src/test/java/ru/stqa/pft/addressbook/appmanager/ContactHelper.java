@@ -28,8 +28,12 @@ public class ContactHelper extends HelperBase{
         }
     }
 
-    public void contactEdit() {
-        click(By.xpath ("//table[@id='maintable']//a[contains(@href, 'edit')]"));
+    public void selectContact(int index) {
+        wd.findElements(By.name ("selected[]")).get(index).click();
+    }
+
+    public void contactEdit(int index) {
+        wd.findElements(By.xpath ("//table[@id='maintable']//a[contains(@href, 'edit')]")).get(index).click();
     }
 
     public void contactDelete() {
@@ -40,4 +44,7 @@ public class ContactHelper extends HelperBase{
         return isElementPresent(By.xpath("//tr[@name='entry']"));
     }
 
+    public int getContactCount() {
+        return wd.findElements(By.name("selected[]")).size();
+    }
 }
