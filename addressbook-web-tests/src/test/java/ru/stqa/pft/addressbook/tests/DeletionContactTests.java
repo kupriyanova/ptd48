@@ -5,14 +5,14 @@ import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.GroupData;
 
+import java.util.List;
+
 import static java.lang.Thread.sleep;
 
 public class DeletionContactTests extends TestBase{
     @Test
     public void testDeletionContact() throws InterruptedException {
         app.getNavigationHelper().gotoHomePage();
-        int before = app.getContactHelper().getContactCount();
-        System.out.println("before = " + before);
 
         if (! app.getContactHelper().isThereAContact()) {
             if (! app.getGroupHelper().isThereAGroupName()){
@@ -25,18 +25,18 @@ public class DeletionContactTests extends TestBase{
             app.getGroupHelper().clickSubmit();
             app.getNavigationHelper().gotoHomePage();
         }
-        app.getContactHelper().selectContact(before - 1);
+        List<ContactData> before = app.getContactHelper().getContactList();
+        System.out.println("before = " + before);
+        app.getContactHelper().selectContact(before.size() - 1);
         app.getContactHelper().contactDelete();
         app.getContactHelper().alertOk();
         app.getNavigationHelper().gotoHomePage();
-        sleep(2000); //без этого не успевает перейти на главную и считает что то другое.
+        sleep(3000); //без этого не успевает перейти на главную и считает что то другое.
 
-        int after = app.getContactHelper().getContactCount();
-        System.out.println("After = " + after);
-        if (before == 0) {
-            Assert.assertEquals(after, before);
-        } else {
-            Assert.assertEquals(after, before - 1);
-        }
+        List<ContactData> after = app.getContactHelper().getContactList();
+        Assert.assertEquals(after.size(), before.size() - 1);
+
+        before.remove(before.size() - 1);
+        Assert.assertEquals(after, before);
     }
 }
