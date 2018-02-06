@@ -1,37 +1,31 @@
 package ru.stqa.pft.addressbook.tests;
 
-import org.testng.Assert;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
-import ru.stqa.pft.addressbook.model.GroupData;
-
-import java.util.Comparator;
-import java.util.List;
+import ru.stqa.pft.addressbook.model.Contacts;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 
 public class CreationContactTests extends TestBase {
 
     @Test
     public void testCreationContact() {
-        app.getNavigationHelper().gotoHomePage();
-        List<ContactData> before = app.getContactHelper().getContactList();
+        app.goTo().homePage();
+        Contacts before = app.contact().allContacts();
+        ContactData contact = new ContactData().withName("contact name")
+                .withMidlename("contact midlename").withLastname("contact lastname")
+                .withMobile("+7 900 000 00 00").withEmail("email@email.com").withGroup("name");
 
-        app.getNavigationHelper().gotoCreationContactPage();
-        ContactData contact = new ContactData("contact name", "contact midlename",
-                "contact lastname", "+7 900 000 00 00", "email@email.com", "name");
-        app.getContactHelper().fillContactForm(contact, true);
-        app.getGroupHelper().clickSubmit();
-        app.getNavigationHelper().gotoHomePage();
+        app.contact().createContact(contact);
+        app.goTo().homePage();
 
-        List<ContactData> after = app.getContactHelper().getContactList();
-        Assert.assertEquals(after.size(), before.size() + 1);
+        Contacts after = app.contact().allContacts();
+        assertThat(after.size(), equalTo(before.size() + 1));
 
-        contact.setId(after.stream().max((o1, o2) -> Integer.compare(o1.getId(), o2.getId())).get().getId());
-        before.add(contact);
-        Comparator<? super ContactData> byId = (g1, g2) -> Integer.compare(g1.getId(), g2.getId());
-        before.sort(byId);
-        System.out.println("Before = " + before);
-        after.sort(byId);
-        System.out.println("after = " + after);
-        Assert.assertEquals(before, after);
+
+        assertThat(after, equalTo(
+                before.withAdded(contact.withId(after.stream().mapToInt((c) -> c.getId()).max().getAsInt()))));
     }
+
+
 }

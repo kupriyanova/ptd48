@@ -1,39 +1,33 @@
 package ru.stqa.pft.addressbook.tests;
 
-import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.GroupData;
-
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.List;
+import ru.stqa.pft.addressbook.model.Groups;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 
 public class EditGroupTests extends TestBase {
+
+    @BeforeMethod
+    public void ensurePreconditions() {
+        app.goTo().groupPage();
+
+        if (app.group().all().size() == 0){
+            app.group().create(new GroupData().withName("name2").withHeader("header").withFooter("group footer"));
+        }
+    }
     @Test
     public void testModificationGroup() {
-        app.getNavigationHelper().gotoGroupPage();
+        Groups before = app.group().all(); //получение списка до редактирования
+        GroupData editGroup = before.iterator().next();
+        GroupData group = new GroupData().withId(editGroup.getId()).withName("name2").withHeader("header").withFooter("group footer"); //данные которые будут вноситься при редактировании
 
-        if (! app.getGroupHelper().isThereAGroup()){
-            app.getGroupHelper().createGroup(new GroupData("name", "header", "group footer"));
-        }
-        List<GroupData> before = app.getGroupHelper().getGroupList();
-        System.out.println("Before: " + before);
-        app.getGroupHelper().selectGroup(before.size() - 1);
-        app.getGroupHelper().clickEdit();
-        GroupData group = new GroupData("name3", "header", "group footer");
-        app.getGroupHelper().fillGroupForm(group);
-        app.getGroupHelper().clickUpdate();
-        app.getGroupHelper().returnGroupPage();
+        app.group().edit(group); //редактирование группы
 
-        List<GroupData> after = app.getGroupHelper().getGroupList();
-        System.out.println("After: " + after);
-        Assert.assertEquals(after.size(), before.size());
+        Groups after = app.group().all(); //получение списка после редактирования
+        assertThat(after.size(), equalTo(before.size())); //сравнение размеров множеств
 
-        before.remove(before.size() - 1);
-        before.add(group);
-        Comparator<? super GroupData> byId = (g1, g2) -> Integer.compare(g1.getId(), g2.getId());
-        before.sort(byId);
-        after.sort(byId);
-        Assert.assertEquals(before, after);
+        assertThat(after, equalTo(before.without(editGroup).withAdded(group)));
     }
 }
