@@ -1,9 +1,11 @@
-package ru.stqa.pft.addressbook.tests;
+package ru.stqa.pft.addressbook.tests.groups;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.GroupData;
 import ru.stqa.pft.addressbook.model.Groups;
+import ru.stqa.pft.addressbook.tests.TestBase;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -24,10 +26,9 @@ public class EditGroupTests extends TestBase {
         GroupData group = new GroupData().withId(editGroup.getId()).withName("name2").withHeader("header").withFooter("group footer"); //данные которые будут вноситься при редактировании
 
         app.group().edit(group); //редактирование группы
+        assertThat(app.group().count(), equalTo(before.size())); //сравнение размеров множеств
 
         Groups after = app.group().all(); //получение списка после редактирования
-        assertThat(after.size(), equalTo(before.size())); //сравнение размеров множеств
-
         assertThat(after, equalTo(before.without(editGroup).withAdded(group)));
     }
 }
