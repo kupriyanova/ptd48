@@ -25,12 +25,13 @@ public class ContactHelper extends HelperBase{
         type(By.name ("mobile"), contactData.getMobilePhone());
         type(By.name ("work"), contactData.getWorkPhone());
         type(By.name ("email"),contactData.getFirstEmail());
+        attach(By.name ("photo"), contactData.getPhoto());
 
-        if(creation) {
-            new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroup());
-        } else {
-            Assert.assertFalse(isElementPresent(By.name("new_group")));
-        }
+//        if(creation) {
+//            new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroup());
+//        } else {
+//            Assert.assertFalse(isElementPresent(By.name("new_group")));
+//        }
     }
 
     public void selectContactById(int id) {
@@ -88,8 +89,8 @@ public class ContactHelper extends HelperBase{
         for (WebElement row : rows) {
             List<WebElement> cells = row.findElements(By.tagName("td"));
             int id = Integer.parseInt(row.findElement(By.tagName("input")).getAttribute("value"));
-            String firstName = cells.get(1).getText();
-            String lastName = cells.get(2).getText();
+            String firstName = cells.get(2).getText();
+            String lastName = cells.get(1).getText();
             String address = cells.get(3).getText();
             String allEmail = cells.get(4).getText();
             String allPhones = cells.get(5).getText();

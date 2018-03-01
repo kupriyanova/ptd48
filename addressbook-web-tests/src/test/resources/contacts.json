@@ -1,0 +1,23 @@
+[
+  {
+    "name": "firstName0",
+    "midlename": "midleName0",
+    "lastname": "lastName0",
+    "mobilePhone": "7(123)1231230",
+    "firstEmail": "email@email.com0"
+  },
+  {
+    "name": "firstName1",
+    "midlename": "midleName1",
+    "lastname": "lastName1",
+    "mobilePhone": "7(123)1231231",
+    "firstEmail": "email@email.com1"
+  },
+  {
+    "name": "firstName2",
+    "midlename": "midleName2",
+    "lastname": "lastName2",
+    "mobilePhone": "7(123)1231232",
+    "firstEmail": "email@email.com2"
+  }
+]
