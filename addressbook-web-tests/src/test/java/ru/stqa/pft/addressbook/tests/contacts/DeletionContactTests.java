@@ -15,30 +15,26 @@ public class DeletionContactTests extends TestBase {
 
     @BeforeMethod
     public void ensurePreconditions() {
-        if (app.contact().all().size() == 0) {
-            if (app.group().all().size() == 0){
-                app.goTo().groupPage();
-                app.group().create(new GroupData().withName("name2").withHeader("header").withFooter("group footer"));
-            }
+        if (app.db().contacts().size() == 0) {
             ContactData new_contact = new ContactData().withFirstName("contact name")
                     .withMidlename("contact midlename").withLastname("contact lastname")
                     .withMobilePhone("+7 900 000 00 00").withAllEmail("email@email.com").withGroup("name");
             app.contact().createContact(new_contact);
-            app.goTo().homePage();
         }
     }
 
     @Test
     public void testDeletionContact() throws InterruptedException {
-        Contacts before = app.contact().all();
+        Contacts before = app.db().contacts();
         ContactData deletedContact = before.iterator().next();
 
+        app.goTo().homePage();
         app.contact().deletion(deletedContact);
         app.goTo().homePage();
         sleep(3000); //без этого не успевает перейти на главную и считает что то другое.
         assertThat(app.contact().count(), equalTo(before.size() - 1));
 
-        Contacts after = app.contact().all();
+        Contacts after = app.db().contacts();
         assertThat(after, equalTo(before.without(deletedContact)));
     }
 }

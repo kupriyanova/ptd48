@@ -25,13 +25,7 @@ public class ContactHelper extends HelperBase{
         type(By.name ("mobile"), contactData.getMobilePhone());
         type(By.name ("work"), contactData.getWorkPhone());
         type(By.name ("email"),contactData.getFirstEmail());
-        attach(By.name ("photo"), contactData.getPhoto());
-
-//        if(creation) {
-//            new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroup());
-//        } else {
-//            Assert.assertFalse(isElementPresent(By.name("new_group")));
-//        }
+        //attach(By.name ("photo"), contactData.getPhoto());
     }
 
     public void selectContactById(int id) {
@@ -54,8 +48,8 @@ public class ContactHelper extends HelperBase{
     }
 
     public void editContact(ContactData editable_contact, ContactData contact) {
-        clickEditById(contact.getId());
-        fill(editable_contact, false);
+        clickEditById(editable_contact.getId());
+        fill(contact, false);
         clickUpdate();
         contactCach = null;
     }

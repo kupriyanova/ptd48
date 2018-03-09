@@ -1,5 +1,6 @@
 package ru.stqa.pft.addressbook.tests.contacts;
 
+import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
@@ -17,11 +18,7 @@ public class EditContactTests extends TestBase {
 
     @BeforeMethod
     public void ensurePreconditions() {
-        if (! app.contact().isThereAContact()) {
-            if (! app.group().isThereAGroupName()){
-                app.goTo().groupPage();
-                app.group().create(new GroupData().withName("name2").withHeader("header").withFooter("group footer"));
-            }
+        if (app.db().contacts().size() == 0) {
             ContactData new_contact = new ContactData().withFirstName("contact name")
                     .withMidlename("contact midlename").withLastname("contact lastname")
                     .withMobilePhone("+7 900 000 00 00").withAllEmail("email@email.com").withGroup("name");
@@ -32,19 +29,19 @@ public class EditContactTests extends TestBase {
 
     @Test
     public void testEditContact() {
-        app.goTo().homePage();
 
-        Contacts before = app.contact().all();
+        Contacts before = app.db().contacts();
         ContactData editableContact = before.iterator().next();
-        ContactData contact = new ContactData().withId(editableContact.getId()).withFirstName("contact name")
-                .withMidlename("contact midlename").withLastname("contact lastname")
-                .withMobilePhone("+7 900 000 00 00").withAllEmail("email@email.com").withGroup("name");
+        ContactData contact = new ContactData().withId(editableContact.getId()).withFirstName("contact_name")
+                .withMidlename("contact_midlename").withLastname("contact_lastname")
+                .withMobilePhone("+7(900)000-00-00").withAllEmail("email@email.com");
 
+        app.goTo().homePage();
         app.contact().editContact(editableContact, contact);
         app.goTo().homePage();
-        assertThat(app.contact().count(), equalTo(before));
+        assertThat(app.contact().count(), equalTo(before.size()));
 
-        Contacts after = app.contact().all();
+        Contacts after = app.db().contacts();
         assertThat(after, equalTo(before.without(editableContact).withAdded(contact)));
     }
 }

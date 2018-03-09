@@ -1,32 +1,64 @@
 package ru.stqa.pft.addressbook.model;
 
 import com.google.gson.annotations.Expose;
+import org.hibernate.annotations.Type;
 
+import javax.persistence.*;
 import java.io.File;
 import java.util.Objects;
 
+@Entity
+@Table(name = "addressbook")
 public class ContactData {
+    @Id
+    @Column(name = "id")
     private int id = Integer.MAX_VALUE;
     @Expose
+    @Column(name = "firstname")
     private String name;
     @Expose
+    @Column(name = "middlename")
     private String midlename;
     @Expose
+    @Column(name = "lastname")
     private String lastname;
+
+    @Transient
     private String group;
+
+    @Column(name = "address")
+    @Type(type = "text")
     private String address;
-    private File photo;
+
+    @Column(name = "photo")
+    @Type(type = "text")
+    private String photo;
+
     //phones
+    @Transient
     private String allPhones;
+    @Column(name = "home")
+    @Type(type = "text")
     private String homePhone;
     @Expose
+    @Column(name = "mobile")
+    @Type(type = "text")
     private String mobilePhone;
+    @Column(name = "work")
+    @Type(type = "text")
     private String workPhone;
     //emails
+    @Transient
     private String allEmail;
     @Expose
+    @Column(name = "email")
+    @Type(type = "text")
     private String firstEmail;
+    @Column(name = "email2")
+    @Type(type = "text")
     private String secondEmail;
+    @Column(name = "email3")
+    @Type(type = "text")
     private String thirdEmail;
 
 
@@ -98,7 +130,7 @@ public class ContactData {
     }
 
     public ContactData withPhoto(File photo) {
-        this.photo = photo;
+        this.photo = photo.getPath();
         return this;
     }
 
@@ -156,7 +188,7 @@ public class ContactData {
         return group;
     }
     public File getPhoto() {
-        return photo;
+        return new File(photo);
     }
 
     @Override
@@ -175,13 +207,19 @@ public class ContactData {
         ContactData that = (ContactData) o;
         return id == that.id &&
                 Objects.equals(name, that.name) &&
-                Objects.equals(lastname, that.lastname);
+                Objects.equals(midlename, that.midlename) &&
+                Objects.equals(lastname, that.lastname) &&
+                Objects.equals(group, that.group) &&
+                Objects.equals(address, that.address) &&
+                Objects.equals(homePhone, that.homePhone) &&
+                Objects.equals(mobilePhone, that.mobilePhone) &&
+                Objects.equals(workPhone, that.workPhone) &&
+                Objects.equals(firstEmail, that.firstEmail);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, name, lastname);
+        return Objects.hash(id, name, midlename, lastname, group, address, homePhone, mobilePhone, workPhone, firstEmail);
     }
-
 }

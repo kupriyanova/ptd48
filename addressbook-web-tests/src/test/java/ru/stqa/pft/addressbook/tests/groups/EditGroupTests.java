@@ -13,22 +13,24 @@ public class EditGroupTests extends TestBase {
 
     @BeforeMethod
     public void ensurePreconditions() {
-        app.goTo().groupPage();
-
-        if (app.group().all().size() == 0){
-            app.group().create(new GroupData().withName("name2").withHeader("header").withFooter("group footer"));
+        if(app.db().groups().size() == 0) {
+            app.goTo().groupPage();
+            app.group().create(new GroupData().withName("name1").withHeader("header0").withFooter("group footer0"));
         }
     }
     @Test
     public void testModificationGroup() {
-        Groups before = app.group().all(); //получение списка до редактирования
+        Groups before = app.db().groups();
+
         GroupData editGroup = before.iterator().next();
-        GroupData group = new GroupData().withId(editGroup.getId()).withName("name2").withHeader("header").withFooter("group footer"); //данные которые будут вноситься при редактировании
+        GroupData group = new GroupData().withId(editGroup.getId()).withName("name2")
+                .withHeader("header").withFooter("group footer");
 
-        app.group().edit(group); //редактирование группы
-        assertThat(app.group().count(), equalTo(before.size())); //сравнение размеров множеств
+        app.goTo().groupPage();
+        app.group().edit(group);
+        assertThat(app.group().count(), equalTo(before.size()));
 
-        Groups after = app.group().all(); //получение списка после редактирования
+        Groups after = app.db().groups();
         assertThat(after, equalTo(before.without(editGroup).withAdded(group)));
     }
 }
